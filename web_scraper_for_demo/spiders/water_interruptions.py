@@ -2,9 +2,12 @@ import scrapy
 from datetime import datetime
 import logging
 import re
+from scrapy.utils.project import get_project_settings
 
+# configure a specific logger
 logger = logging.getLogger("WaterInterruptionsSpider")
-filehandler = logging.FileHandler("/var/scraper/scraper.log")
+interruptions_log_file = get_project_settings().get("WATER_INTERRUPTIONS_LOG_FILE")
+filehandler = logging.FileHandler(interruptions_log_file)
 filehandler.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
 logger.addHandler(filehandler)
 
@@ -39,10 +42,10 @@ class WaterInterruptionsSpider(scrapy.Spider):
         text = response.css(".content-column-content > article:nth-child(1) ::text").getall()
         text = "".join(text).strip().lower()
 
-        search_pattern = r'buna ziua|bună ziua|fagului|becas|becaș'
+        search_pattern = r'buna ziua|bună ziua|fagului|becas|becaș|craiova'
 
         if (re.match(search_pattern, text)):
-            logger.info(f"found matches in text for pattern '{search_pattern}', better be careful!")
+            logger.info(f"found matches in text for pattern '{search_pattern}', better be careful:\n{text}")
         else:
             logger.info(f"no worries, no matches found for pattern \'{search_pattern}\'")
         return

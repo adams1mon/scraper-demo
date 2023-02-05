@@ -91,3 +91,8 @@ ROBOTSTXT_OBEY = True
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+
+# Logger - root
+LOG_FILE = "/var/log/scraper/scrapy.log"
+# Logger - specific
+WATER_INTERRUPTIONS_LOG_FILE = "/var/log/scraper/water_interruptions.log"

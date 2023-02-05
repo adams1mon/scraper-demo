@@ -93,6 +93,19 @@ TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
 # Logger - root
-LOG_FILE = "/var/log/scraper/scrapy.log"
+# LOG_FILE = "/var/log/scraper/scrapy.log"
+LOG_FILE="scrapy.log"
 # Logger - specific
-WATER_INTERRUPTIONS_LOG_FILE = "/var/log/scraper/water_interruptions.log"
+# WATER_INTERRUPTIONS_LOG_FILE = "/var/log/scraper/water_interruptions.log"
+WATER_INTERRUPTIONS_LOG_FILE = "water_interruptions.log"
+
+# search in article for this pattern
+WATER_INTERRUPTIONS_SEARCH_PATTERN = r'buna ziua|bună ziua|fagului|becas|becaș|craiova'
+
+###########  EMAIL NOTIFICATIONS DON'T WORK DUE TO MISSING TLS CONFIG  ###########
+# mail notifications
+WATER_INTERRUPTIONS_MAIL_ENABLED = False
+WATER_INTERRUPTIONS_MAIL_TO = ["destination@mail.com"]
+
+# scrapy mail settings
+MAIL_HOST = "smtp.some_host.com"

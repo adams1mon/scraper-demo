@@ -10,9 +10,9 @@ def create_dir_for_file(filename):
     dirname = os.path.dirname(filename)
     if (not os.path.exists(dirname)):
         try:
-            os.makedirs(dirname)
+            os.makedirs(dirname, exist_ok=True)
         except FileExistsError or FileNotFoundError:
-            return
+            exit(1)
 
 def send_mail(body):
     if (mail_enabled):

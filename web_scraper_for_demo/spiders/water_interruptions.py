@@ -1,3 +1,4 @@
+import os
 import scrapy
 from datetime import datetime
 import logging
@@ -5,12 +6,35 @@ import re
 from scrapy.utils.project import get_project_settings
 from scrapy.mail import MailSender
 
+def create_dir_for_file(filename):
+    dirname = os.path.dirname(filename)
+    if (not os.path.exists(dirname)):
+        try:
+            os.makedirs(dirname)
+        except FileExistsError or FileNotFoundError:
+            return
+
+def send_mail(body):
+    if (mail_enabled):
+        to = settings.get("WATER_INTERRUPTIONS_MAIL_TO"),
+        logger.info(f"trying to send mail to {to}")
+        mailer.send(
+            to,
+            subject = f"Water interruptions in {pattern}",
+            body = body
+        )
+
 settings = get_project_settings()
 pattern = settings.get("WATER_INTERRUPTIONS_SEARCH_PATTERN")
 
 # configure a specific logger
 logger = logging.getLogger("WaterInterruptionsSpider")
+log_file = settings.get("LOG_FILE")
+create_dir_for_file(log_file)
+
 interruptions_log_file = settings.get("WATER_INTERRUPTIONS_LOG_FILE")
+create_dir_for_file(interruptions_log_file)
+
 filehandler = logging.FileHandler(interruptions_log_file)
 filehandler.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
 logger.addHandler(filehandler)
@@ -52,16 +76,7 @@ class WaterInterruptionsSpider(scrapy.Spider):
 
         if (re.match(pattern, text)):
             logger.warn(f"found matches in text for pattern '{pattern}', better be careful:\n{text}")
+            send_mail(text)
         else:
             logger.info(f"no worries, no matches found for pattern \'{pattern}\'")
         return
-
-def send_mail(body):
-    if (mail_enabled):
-        to = settings.get("WATER_INTERRUPTIONS_MAIL_TO"),
-        logger.info(f"trying to send mail to {to}")
-        mailer.send(
-            to,
-            subject = f"Water interruptions in {pattern}",
-            body = body
-        )

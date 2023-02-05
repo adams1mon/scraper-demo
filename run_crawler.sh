@@ -19,6 +19,8 @@ else
 fi
 
 echo "running crawler every $interval_seconds seconds"
+echo "using scrapy path: $scrapy_path"
+
 while true
 do
   echo "running crawler"
